@@ -7,9 +7,10 @@ with open('CS.json', 'r') as f:
     fileDict = json.load(f)
 classes = fileDict["data"]["classes"]
 data = []
-for class in classes:
+for c in classes:
     for section in classes["enrollGroups"]["classSections"]:
         for meeting in section["meetings"]:
-            data.append((class["ssrComponent"], section["classId"], class["titleLong"], )
-examples = [(2, "def"), (3, "ghi"), (4, "jkl")]
-cur.executemany("INSERT INTO samples VALUES (?, ?)", examples)
+            data.append((c["ssrComponent"], section["classId"], c["titleLong"], )
+
+cur.executemany("INSERT INTO samples VALUES (?, ?, ?, ?, ?, ?, ?)", data)
+
