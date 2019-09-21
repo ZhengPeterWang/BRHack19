@@ -8,21 +8,27 @@ cur = con.cursor()
 
 with open("selectiveList.json", "r") as f:
     fileDict = json.load(f)
-    classNbr = fileDict["classNbr"]
-cur.executemany("INSERT INTO sellist (classNbr) VALUES (?) ", classNbr)
+    nbr = fileDict["classNbr"]
+for i in nbr:
+    cur.execute("INSERT INTO sellist (classNbr) VALUES (? ) ", (i,))
 
 cur.execute(
     "CREATE TABLE result AS \
-    SELECT * FROM database INNER JOIN sellist ON sellist.classNbr == database.classNbr"
+    SELECT * FROM classList INNER JOIN sellist ON sellist.classNbr == classList.classID"
 )
 
-res = cur.execute(
-    "SELECT * FROM database WHERE (classNbr NOT IN (SELECT classNbr FROM result)) \
-    AND NOT EXISTS (SELECT * FROM result WHERE result.starttime <= database.endtime \
-    AND result.endtime >= database.starttime \
-    AND (result.mon == database.mon OR result.tue == database.tue OR result.wed == database.wed OR \
-    result.thu == database.thu OR result.fri == database.fri))"
+cur.execute(
+    "SELECT * FROM classList WHERE (classID NOT IN (SELECT classNbr FROM result)) \
+    AND NOT EXISTS (SELECT * FROM result WHERE result.timeStart <= classList.timeEnd \
+    AND result.timeEnd >= classList.timeStart \
+    AND (result.mon == classList.mon OR result.tue == classList.tue OR result.wed == classList.wed OR \
+    result.thu == classList.thu OR result.fri == classList.fri))"
 )
+
+res = cur.fetchall()
 
 con.commit()
 con.close()
+
+for i in res:
+    print(i)
