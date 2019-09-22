@@ -2,6 +2,7 @@ import os
 import sqlite3  # Enable control of an SQLite database
 import sys
 import json
+import csv
 
 con = sqlite3.connect("database.db")
 cur = con.cursor()
@@ -29,6 +30,28 @@ res = cur.fetchall()
 
 con.commit()
 con.close()
-
+"""
 for i in res:
     print(i)
+"""
+
+with open("out.csv", "w") as out:
+    csv_out = csv.writer(out)
+    csv_out.writerow(
+        [
+            "sessionName",
+            "csrID",
+            "courseName",
+            "Mon",
+            "Tue",
+            "Wed",
+            "Thu",
+            "Fri",
+            "startTime",
+            "endTime",
+            "csrCompleteID",
+        ]
+    )
+    for row in res:
+        csv_out.writerow(row)
+
