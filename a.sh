@@ -2,4 +2,4 @@
 rm database.db
 python3 init_db.py
 python3 addCoursesFromFile.py
-python3 query.py
+python3 query.py > out.txt
